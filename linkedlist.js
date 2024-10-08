@@ -24,7 +24,7 @@ class LinkedList {
     }
 
     prepend(value) {
-        const newNode = new Node(value = value, nextNode = this.#head);
+        const newNode = new Node(value, this.#head);
         this.#head = newNode;
     }
 
@@ -44,7 +44,7 @@ class LinkedList {
     }
 
     get tail() {
-        if (this.#head === null) return 0;
+        if (this.#head === null) return null;
         let traversal = this.#head;
         while (traversal.nextNode != null) {
             traversal = traversal.nextNode;
@@ -53,6 +53,7 @@ class LinkedList {
     }
 
     at(index) {
+        if (this.#head === null || index < 0) return -1;
         try {
             let traversal = this.#head;
             for (let i = 0; i < index; i++) {
@@ -66,11 +67,12 @@ class LinkedList {
     }
 
     pop() {
-        if (this.size() = 1) {
+        if (this.#head === null) return null;
+        if (this.size === 1) {
             this.#head = null;
             return
         }
-        this.at(this.size()-2).nextNode = null;
+        this.at(this.size-2).nextNode = null;
     }
 
     contains(value) {
@@ -88,8 +90,8 @@ class LinkedList {
     find(value) {
         if (this.#head === null) return -1;
         let traversal = this.#head;
-        for (let i = 0; i < this.size(); i++) {
-            if (traversal.value = value) return i;
+        for (let i = 0; i < this.size; i++) {
+            if (traversal.value === value) return i;
             traversal = traversal.nextNode;
         }
 
@@ -101,8 +103,10 @@ class LinkedList {
         let traversal = this.#head;
         let string = ''
         while (traversal.nextNode != null) {
-            string.concat(`( ${traversal.value} ) -> `)
+            string = string.concat(`( ${traversal.value} ) -> `);
+            traversal = traversal.nextNode;
         }
+        string = string.concat(`( ${traversal.value} ) -> `);
         string += 'null';
 
         return string;
@@ -111,8 +115,9 @@ class LinkedList {
     insertAt(value, index) {
         try { 
             const leftNode = index-1 >= 0 ? this.at(index-1) : null;
-            const rightNode = index <= size()-1 ? this.at(index) : null;
-            const newNode = newNode(value, rightNode);
+            const rightNode = index <= this.size-1 ? this.at(index) : null;
+            console.log(rightNode);
+            const newNode = new Node(value, rightNode);
             if (leftNode) leftNode.nextNode = newNode;
             else this.#head = newNode;
         }
@@ -124,11 +129,13 @@ class LinkedList {
 
     removeAt(index) {
         try {
-            const leftNode = index-1 >= 0 ? this.at(index-1) : null;
-            if (leftNode) leftNode.nextNode(index+1 <= size()-1 ? this.at(index+1) : null);
+            const leftNode = this.at(index-1) != -1 ? this.at(index-1) : null;
+            if (leftNode) leftNode.nextNode = this.at(index+1) != -1 ? this.at(index+1) : null;
             else this.#head = this.#head.nextNode;
         } catch {
             throw new Error('Index out of range');
         }   
     }
 }
+
+export default LinkedList;
